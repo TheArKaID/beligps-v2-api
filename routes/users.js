@@ -1,14 +1,14 @@
-const express = require('express');
-const router = express.Router();
-const models = require('../models/index')
-const { check } = require('../middlewares/authenticate')
+import { Router } from "express"
+import models from '../models/index.js'
+import authenticate from '../middlewares/authenticate.js'
+
+const router = Router()
 
 /* GET users listing. */
-router.get('/', check, async function(req, res, next) {
-  
+router.get('/', authenticate.check, async function(req, res, next) {
   var users = await models.User.findAll()
 
-  res.send(users);
-});
+  res.send(users)
+})
 
-module.exports = router;
+export default router

@@ -1,8 +1,10 @@
-const { expressjwt } = require("express-jwt");
-const config = require('../config/index')
+import { expressjwt } from 'express-jwt'
+import config from '../config/app.js'
 
 const authenticate = {}
 
-authenticate.check = expressjwt({ secret: config.app.secret.key, algorithms: [config.app.secret.algorithm] })
+const conf = config
 
-module.exports = authenticate
+authenticate.check = expressjwt({ secret: conf.secret.key, algorithms: [conf.secret.algorithm] })
+
+export default authenticate

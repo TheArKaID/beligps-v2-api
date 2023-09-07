@@ -4,23 +4,25 @@
  * Module dependencies.
  */
 
-var app = require('../app');
-var debug = require('debug')('track-replay-api:server');
-var http = require('http');
-var config = require('../config/app')
+import app from '../app.js';
+import d from 'debug';
+import { createServer } from 'http';
+import appConfig from '../config/app.js';
+
+const debug = d('track-replay-api:server')
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(config.port);
+var port = normalizePort(appConfig.port);
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+var server = createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -87,6 +89,6 @@ function onListening() {
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  console.log(`Server is running on ${config.url}:${config.port}`)
+  console.log(`Server is running on :${port}`)
   debug('Listening on ' + bind);
 }

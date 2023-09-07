@@ -1,5 +1,5 @@
-const createLogger = require('bunyan')
-const config = require('../config/app')
+import createLogger from 'bunyan'
+import config from '../config/app.js'
 
 const Logger = {}
 
@@ -49,4 +49,4 @@ Logger.log = (level, message) => {
     log[level](JSON.stringify(log_data))
 }
 
-module.exports = Logger
+export default Logger

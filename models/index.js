@@ -1,21 +1,31 @@
 'use strict'
 
-const fs = require('fs')
-const path = require('path')
-const Sequelize = require('sequelize')
-const basename = path.basename(__filename)
-const config = require('../config/index')
+import { readdirSync } from 'fs'
+import { basename as _basename, join, dirname } from 'path'
+import Sequelize, { DataTypes } from 'sequelize'
+import config from '../config/config.js'
+import configApp from '../config/app.js'
+import { fileURLToPath } from 'url';
+import os from 'os'
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const basename = _basename(__filename)
+
 const db = {}
+const conf = config[configApp.env]
 
-let sequelize = new Sequelize(config.config.database, config.config.username, config.config.password, config.config)
+let sequelize = new Sequelize(conf.database, conf.username, conf.password, conf)
 
-fs
-  .readdirSync(__dirname)
+readdirSync(__dirname)
   .filter(file => {
     return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js')
   })
-  .forEach(file => {
-    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes)
+  .forEach(async file => {
+    const uri = os.platform() === 'win32' ? `file:///${join(__dirname, file)}` : join(__dirname, file)
+
+    const model = (await import(uri)).default(sequelize, DataTypes)
+
     db[model.name] = model
   })
 
@@ -28,4 +38,4 @@ Object.keys(db).forEach(modelName => {
 db.sequelize = sequelize
 db.Sequelize = Sequelize
 
-module.exports = db
+export default db

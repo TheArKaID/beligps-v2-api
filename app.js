@@ -1,27 +1,34 @@
-const express = require('express');
-const createError = require('http-errors');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const cors = require('cors');
-const morganLogger = require('morgan');
-const logger = require('./helpers/Logger').init();
-const config = require('./config/index')
-const jwt = require('jsonwebtoken');
+import express, { urlencoded, static as staticExpress, json } from 'express';
+import createError from 'http-errors';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import morganLogger from 'morgan';
+import Logger from './helpers/Logger.js';
+import config from './config/app.js';
+import { decode } from 'jsonwebtoken';
+import { basename as _basename, join, dirname } from 'path'
+import { fileURLToPath } from 'url';
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+import indexRouter from './routes/index.js';
+import usersRouter from './routes/users.js';
 
 const app = express();
+
 app.disable('x-powered-by');
 app.use(cors());
 
-if (config.app.env !== 'test') {
+if (config.env !== 'test') {
     app.use(morganLogger('dev'));
 }
 
-app.use(express.urlencoded({ extended: false }));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(staticExpress(join(__dirname, 'public')));
+
+const logger = Logger.init();
 
 app.use((req, res, next) => {
     let paths = req.path;
@@ -30,7 +37,7 @@ app.use((req, res, next) => {
     let new_path = splitted_path[0] + '/' + splitted_path[1] + (splitted_path[2] ? '/' + splitted_path[2] : '');
 
     var token = req.headers.authorization ? req.headers.authorization.replace('Bearer ', '') : null;
-    var tokendata = jwt.decode(token);
+    var tokendata = decode(token);
     let user = tokendata != null ? tokendata.name : null;
     let body_data = { ...req.body };
     body_data.password = body_data.password ? null : undefined;
@@ -41,7 +48,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(express.json());
+app.use(json());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -80,4 +87,4 @@ app.use(function (err, req, res, next) {
     });
 });
 
-module.exports = app;
+export default app;
