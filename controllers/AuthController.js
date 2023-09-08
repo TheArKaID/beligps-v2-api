@@ -3,7 +3,7 @@ import bcryptjs from "bcryptjs";
 import joi from 'joi';
 import models from '../models/index.js';
 import jwt from 'jsonwebtoken';
-// import config from '../config/index.js';
+import config from '../config/app.js'
 
 const controllers = {};
 
@@ -46,7 +46,7 @@ controllers.login = async (req, res, next) => {
     }
 
     user.password = undefined;
-    const jsontoken = jwt.sign({ comparePassword: user }, "J5onS3cR34T", {
+    const jsontoken = jwt.sign({ comparePassword: user }, config.secret.key, {
         expiresIn: "1d"
     });
     return res.status(200).json({

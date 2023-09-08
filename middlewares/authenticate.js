@@ -3,8 +3,6 @@ import config from '../config/app.js'
 
 const authenticate = {}
 
-const conf = config
-
-authenticate.check = expressjwt({ secret: conf.secret.key, algorithms: [conf.secret.algorithm] })
+authenticate.check = expressjwt({ secret: config.secret.key, algorithms: [config.secret.algorithm] })
 
 export default authenticate
