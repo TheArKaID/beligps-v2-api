@@ -51,7 +51,7 @@ app.use((req, res, next) => {
     logger.set(role, true, new_path, req.method, user, req.ip);
     logger.log('info', `${JSON.stringify(body_data)}`);
 
-    req.user = tokendata.user
+    req.user = tokendata?.user
     next();
 });
 
@@ -92,7 +92,8 @@ app.use(function (err, req, res, next) {
         'error': {
             'field': err.name || 'error',
             'key': 'server.error',
-            'message': 'Please Contact API Administrator for more info'
+            'message': 'Please Contact API Administrator for more info',
+            'stack': config.env =='development' ? err.stack : undefined
         }
     });
 });
