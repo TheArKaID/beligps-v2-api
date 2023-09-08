@@ -10,6 +10,7 @@ import { basename as _basename, join, dirname } from 'path'
 import { fileURLToPath } from 'url';
 
 import indexRouter from './routes/index.js';
+import authRouter from './routes/auth.js';
 import usersRouter from './routes/users.js';
 
 const app = express();
@@ -51,6 +52,7 @@ app.use((req, res, next) => {
 app.use(json());
 
 app.use('/', indexRouter);
+app.use('/auth', authRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
@@ -70,7 +72,7 @@ app.use(function (err, req, res, next) {
                 'field': err.field || 'error',
                 'key': err.key || 'unknown.error',
                 'message': err.error_message || err.statusText || 'Please Contact API Administrator for more info',
-                'stack': err.stack
+                'stack': config.env =='development' ? err.stack : undefined
             }
         });
     }

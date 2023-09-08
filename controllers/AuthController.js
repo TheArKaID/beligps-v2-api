@@ -1,16 +1,16 @@
 "use strict";
-const { compare } = require("bcryptjs");
-const Joi = require('joi');
-const models = require('../models/index');
-const jwt = require('jsonwebtoken');
-const config = require('../config/index');
+import bcryptjs from "bcryptjs";
+import joi from 'joi';
+import models from '../models/index.js';
+import jwt from 'jsonwebtoken';
+// import config from '../config/index.js';
 
 const controllers = {};
 
 controllers.login = async (req, res, next) => {
-    const schema = Joi.object({
-        username: Joi.string().required(),
-        password: Joi.string().min(4).alphanum().required()
+    const schema = joi.object({
+        username: joi.string().required(),
+        password: joi.string().min(4).alphanum().required()
     });
     
     const { error, value } = schema.validate(req.body);
@@ -18,7 +18,13 @@ controllers.login = async (req, res, next) => {
         return res.status(400).json({
             'status': 400,
             'message': 'Validation Failed',
-            error
+            'response': error.details.map((err) => {
+                return {
+                    'field': err.context.key,
+                    'key': err.type,
+                    'message': err.message
+                }
+            })
         });
     }
 
@@ -31,7 +37,7 @@ controllers.login = async (req, res, next) => {
         })
     }
     
-    const comparePassword = await compare(value.password, checker.password)
+    const comparePassword = await bcryptjs.compare(value.password, user.password)
     if (!comparePassword) {
         return res.status(400).json({
             'status': 400,
@@ -52,3 +58,5 @@ controllers.login = async (req, res, next) => {
         }
     });
 }
+
+export default controllers
