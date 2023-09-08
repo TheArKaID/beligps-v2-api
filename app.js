@@ -12,6 +12,7 @@ import { fileURLToPath } from 'url';
 import indexRouter from './routes/index.js';
 import authRouter from './routes/auth.js';
 import usersRouter from './routes/users.js';
+import companiesRouter from './routes/companies.js';
 
 const app = express();
 
@@ -54,6 +55,7 @@ app.use(json());
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/users', usersRouter);
+app.use('/companies', companiesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
