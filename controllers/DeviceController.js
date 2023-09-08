@@ -1,20 +1,29 @@
 import models from '../models/index.js'
 import Joi from 'joi';
+import paginator from '../helpers/Paginator.js';
 
 const controllers = {};
 
 controllers.index = async (req, res) => {
-    var devices = await models.Device.findAll({
+    const { page, size } = req.query;
+
+    const { limit, offset } = paginator.getPagination(page, size);
+
+    var devices = await models.Device.findAndCountAll({
+        limit,
+        offset,
         where: {
             owned_by: 'User',
             owner_id: req.user.id,
         }
     })
   
-    res.status(200).json({
+    const response = paginator.getPagingData(devices, page, limit);
+
+    return res.status(200).json({
         'status': 200,
         'message': 'Success',
-        'response': devices
+        'response': response
     })
 }
 
@@ -30,13 +39,13 @@ controllers.show = async (req, res) => {
     })
 
     if (!device) {
-        res.status(404).json({
+        return res.status(404).json({
             'status': 404,
             'message': 'Device Not Found',
         })
     }
 
-    res.status(200).json({
+    return res.status(200).json({
         'status': 200,
         'message': 'Success',
         'response': device
@@ -50,10 +59,10 @@ controllers.store = async (req, res) => {
         attributes: Joi.object().optional(),
     })
 
-    const { error } = schema.validate(req.body)
+    const { error, value } = schema.validate(req.body)
 
     if (error) {
-        res.status(400).json({
+        return res.status(400).json({
             'status': 400,
             'message': 'Validation Failed',
             'response': error.details.map((err) => {
@@ -67,14 +76,17 @@ controllers.store = async (req, res) => {
     } 
 
     const device = await models.Device.create({
-        name: req.body.name,
-        imei: req.body.imei,
+        name: value.name,
+        imei: value.imei,
         owned_by: 'User',
         owner_id: req.user.id,
-        attributes: req.body.attributes,
+        attributes: value.attributes,
+        phone: value.phone,
+        created_by: req.user.name,
+        updated_by: req.user.name,
     })
 
-    res.status(200).json({
+    return res.status(200).json({
         'status': 200,
         'message': 'Success',
         'response': device
@@ -85,12 +97,14 @@ controllers.update = async (req, res) => {
     const schema = Joi.object({
         phone: Joi.string().optional(),
         attributes: Joi.object().optional(),
+        status: Joi.string().optional(),
+        disabled: Joi.boolean().optional(),
     })
 
-    const { error } = schema.validate(req.body)
+    const { error, value } = schema.validate(req.body)
 
     if (error) {
-        res.status(400).json({
+        return res.status(400).json({
             'status': 400,
             'message': 'Validation Failed',
             'response': error.details.map((err) => {
@@ -114,17 +128,21 @@ controllers.update = async (req, res) => {
     })
 
     if (!device) {
-        res.status(404).json({
+        return res.status(404).json({
             'status': 404,
             'message': 'Device Not Found',
         })
     }
 
-    device.phone = req.body.phone
-    device.attributes = req.body.attributes
+    device.phone = value.phone
+    device.attributes = value.attributes
+    device.updated_by = req.user.name
+    device.status = value.status
+    device.disabled = value.disabled
+
     await device.save()
 
-    res.status(200).json({
+    return res.status(200).json({
         'status': 200,
         'message': 'Success',
         'response': device
@@ -143,7 +161,7 @@ controllers.destroy = async (req, res) => {
     })
 
     if (!device) {
-        res.status(404).json({
+        return res.status(404).json({
             'status': 404,
             'message': 'Device Not Found',
         })
@@ -151,7 +169,7 @@ controllers.destroy = async (req, res) => {
 
     await device.destroy()
 
-    res.status(200).json({
+    return res.status(200).json({
         'status': 200,
         'message': 'Success',
         'response': device

@@ -24,7 +24,8 @@ module.exports = {
       },
       status: {
         allowNull: false,
-        type: Sequelize.STRING(50)
+        type: Sequelize.STRING(50),
+        defaultValue: 'offline'
       },
       disabled: {
         allowNull: false,
