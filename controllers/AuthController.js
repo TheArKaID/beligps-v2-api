@@ -46,7 +46,7 @@ controllers.login = async (req, res, next) => {
     }
 
     user.password = undefined;
-    const jsontoken = jwt.sign({ comparePassword: user }, config.secret.key, {
+    const jsontoken = jwt.sign({ user }, config.secret.key, {
         expiresIn: "1d"
     });
     return res.status(200).json({

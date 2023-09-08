@@ -43,13 +43,15 @@ app.use((req, res, next) => {
 
     var token = req.headers.authorization ? req.headers.authorization.replace('Bearer ', '') : null;
     var tokendata = decode(token);
-    let user = tokendata != null ? tokendata.name : null;
+    let user = tokendata != null ? tokendata.user.name : null;
+
     let body_data = { ...req.body };
     body_data.password = body_data.password ? null : undefined;
 
     logger.set(role, true, new_path, req.method, user, req.ip);
     logger.log('info', `${JSON.stringify(body_data)}`);
 
+    req.user = tokendata.user
     next();
 });
 
