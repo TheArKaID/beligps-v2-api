@@ -5,10 +5,14 @@ import authenticate from '../middlewares/authenticate.js'
 const router = Router()
 
 /* GET users listing. */
-router.get('/', authenticate.check, async function(req, res, next) {
+router.get('/', async function(req, res, next) {
   var users = await models.User.findAll()
 
-  res.send(users)
+  res.json({
+    'status': 200,
+    'message': 'Success',
+    'response': users
+  })
 })
 
 export default router

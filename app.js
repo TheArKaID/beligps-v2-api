@@ -33,6 +33,8 @@ app.use(staticExpress(join(__dirname, 'public')));
 const logger = Logger.init();
 
 app.use((req, res, next) => {
+    res.setHeader('X-Powered-By', 'BeliGPS')
+
     let paths = req.path;
     let splitted_path = paths.split('/');
     let role = splitted_path[1];

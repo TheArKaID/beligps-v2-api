@@ -1,7 +1,7 @@
 'use strict';
 import { Model } from 'sequelize';
 export default (sequelize, DataTypes) => {
-  class Users extends Model {
+  class User extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -9,7 +9,7 @@ export default (sequelize, DataTypes) => {
      */
     static associate(models) {}
   }
-  Users.init({
+  User.init({
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
@@ -34,5 +34,5 @@ export default (sequelize, DataTypes) => {
     updatedAt: 'updated_at',
   });
 
-  return Users;
+  return User;
 };
