@@ -27,6 +27,7 @@ export default (sequelize, DataTypes) => {
     imei: DataTypes.STRING(50),
     status: DataTypes.STRING(50),
     disabled: DataTypes.BOOLEAN,
+    phone: DataTypes.STRING(50),
     attributes: DataTypes.JSONB,
     created_at: DataTypes.DATE,
     created_by: DataTypes.STRING(50),

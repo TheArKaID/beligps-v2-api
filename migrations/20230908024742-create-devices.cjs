@@ -31,6 +31,10 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: false
       },
+      phone: {
+        allowNull: true,
+        type: Sequelize.STRING(50)
+      },
       attributes: {
         allowNull: true,
         type: Sequelize.JSONB,
