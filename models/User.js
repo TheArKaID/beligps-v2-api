@@ -17,6 +17,7 @@ export default (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV4
     },
     email: DataTypes.STRING(50),
+    username: DataTypes.STRING(50),
     password: DataTypes.STRING(255),
     name: DataTypes.STRING(50),
     phone: DataTypes.STRING(25),
