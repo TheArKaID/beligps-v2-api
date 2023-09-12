@@ -14,7 +14,8 @@ export default (sequelize, DataTypes) => {
     id: {
       type: DataTypes.UUID,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4
     },
     owner_id: {
       type: DataTypes.UUID,
