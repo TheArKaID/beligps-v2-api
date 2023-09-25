@@ -52,8 +52,8 @@ app.use((req, res, next) => {
     let body_data = { ...req.body };
     body_data.password = body_data.password ? null : undefined;
 
-    logger.set(role, true, new_path, req.method, user, req.ip);
-    logger.log('info', `${JSON.stringify(body_data)}`);
+    // logger.set(role, true, new_path, req.method, user, req.ip);
+    // logger.log('info', `${JSON.stringify(body_data)}`);
 
     req.user = tokendata?.user
     next();
@@ -73,20 +73,21 @@ app.use(function (req, res, next) {
 app.use(function (err, req, res, next) {
     let status_code = err.status ? (err.status).toString().substring(0, 1) : 5;
     if (status_code == 4) {
-        logger.log('warn', `${err.error_message || err.error || err.statusText || 'No Message'}`)
+        // logger.log('warn', `${err.error_message || err.error || err.statusText || 'No Message'}`)
         return res.status(err.status || err.statusCode || 400).send({
             'status': err.status || err.statusCode || 400,
             'message': err.message || 'Failed',
-            'error': {
+            'error': err.response ? undefined : {
                 'field': err.field || 'error',
                 'key': err.key || 'unknown.error',
                 'message': err.error_message || err.statusText || 'Please Contact API Administrator for more info',
                 'stack': config.env =='development' ? err.stack : undefined
-            }
+            },
+            'response': err.response || undefined
         });
     }
 
-    logger.log('error', `${err.message || err.statusText || err.error || err.error_message || 'No Message'} - ${err.stack || 'Unknown Error Source File'}`)
+    // logger.log('error', `${err.message || err.statusText || err.error || err.error_message || 'No Message'} - ${err.stack || 'Unknown Error Source File'}`)
     return res.status(500).send({
         'status': '500',
         'message': 'Service Unavailable',
