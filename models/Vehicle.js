@@ -2,7 +2,7 @@
 import { Model } from 'sequelize';
 
 export default (sequelize, DataTypes) => {
-  class Device extends Model {
+  class Vehicle extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -10,24 +10,20 @@ export default (sequelize, DataTypes) => {
      */
     static associate(models) {}
   }
-  Device.init({
+  Vehicle.init({
     id: {
       type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4
     },
-    owner_id: {
+    user_id: {
       type: DataTypes.UUID,
-      allowNull: false,
+      allowNull: true,
     },
     owned_by: {
       type: DataTypes.STRING(50),
       allowNull: false,
-    },
-    vehicle_id: {
-      type: DataTypes.UUID,
-      allowNull: true,
     },
     imei: DataTypes.STRING(50),
     status: DataTypes.STRING(50),
@@ -41,12 +37,12 @@ export default (sequelize, DataTypes) => {
   }, {
     sequelize,
     timestamps: true,
-    modelName: 'Device',
+    modelName: 'Vehicle',
     createdAt: 'created_at',
     updatedAt: 'updated_at',
     indexes: [
       {
-        name: "Devices_pkey",
+        name: "Vehicles_pkey",
         unique: true,
         fields: [
           { name: "id" },
@@ -54,5 +50,5 @@ export default (sequelize, DataTypes) => {
       },
     ]
   });
-  return Device;
+  return Vehicle;
 }
