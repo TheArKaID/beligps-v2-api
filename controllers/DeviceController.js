@@ -99,7 +99,6 @@ controllers.store = async (req, res, next) => {
         }
 
         device = await models.Device.create({
-            name: value.name,
             imei: value.imei,
             status: value.status,
             owned_by: 'User',
