@@ -7,7 +7,7 @@ let log
 
 Logger.init = () => {
     let logger = createLogger({
-        name: 'billing-logger',
+        name: 'beligps-api-logger',
         appname: config.name,
         streams: [
             {

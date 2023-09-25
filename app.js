@@ -33,6 +33,10 @@ app.use(staticExpress(join(__dirname, 'public')));
 
 const logger = Logger.init();
 
+app.use(json());
+
+app.use('/auth', authRouter);
+
 app.use((req, res, next) => {
     res.setHeader('X-Powered-By', 'BeliGPS')
 
@@ -43,7 +47,7 @@ app.use((req, res, next) => {
 
     var token = req.headers.authorization ? req.headers.authorization.replace('Bearer ', '') : null;
     var tokendata = decode(token);
-    let user = tokendata != null ? tokendata.user.name : null;
+    let user = tokendata != null ? tokendata?.user?.name : null;
 
     let body_data = { ...req.body };
     body_data.password = body_data.password ? null : undefined;
@@ -55,10 +59,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(json());
-
 app.use('/', indexRouter);
-app.use('/auth', authRouter);
 app.use('/users', usersRouter);
 app.use('/companies', companiesRouter);
 app.use('/devices', devicesRouter);

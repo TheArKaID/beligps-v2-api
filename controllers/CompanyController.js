@@ -6,7 +6,7 @@ const controllers = {};
 controllers.index = async (req, res) => {
     var companies = await models.Company.findAll()
   
-    res.json({
+    return res.json({
         'status': 200,
         'message': 'Success',
         'response': companies
