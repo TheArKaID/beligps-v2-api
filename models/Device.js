@@ -8,7 +8,25 @@ export default (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {}
+    static associate(models) {
+      Device.belongsTo(models.User, {
+        foreignKey: 'owner_id',
+        as: 'user_owner',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+      });
+      Device.belongsTo(models.Company, {
+        foreignKey: 'owner_id',
+        as: 'company_owner',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+      });
+      Device.belongsTo(models.Vehicle, {
+        foreignKey: 'vehicle_id',
+        as: 'vehicle',
+        onUpdate: 'CASCADE'
+      });
+    }
   }
   Device.init({
     id: {
