@@ -15,6 +15,7 @@ import usersRouter from './routes/users.js';
 import companiesRouter from './routes/companies.js';
 import devicesRouter from './routes/devices.js';
 import vehiclesRouter from './routes/vehicles.js';
+import pairingsRouter from './routes/pairings.js';
 
 const app = express();
 
@@ -65,6 +66,7 @@ app.use('/users', usersRouter);
 app.use('/companies', companiesRouter);
 app.use('/devices', devicesRouter);
 app.use('/vehicles', vehiclesRouter);
+app.use('/pairings', pairingsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
