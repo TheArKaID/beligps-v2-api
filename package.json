@@ -8,6 +8,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@clickhouse/client": "^0.2.2",
     "bcryptjs": "^2.4.3",
     "bunyan": "^1.8.15",
     "cookie-parser": "~1.4.4",
