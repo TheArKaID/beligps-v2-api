@@ -9,9 +9,9 @@ export default (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Vehicle.hasOne(models.Device, {
+      Vehicle.hasMany(models.Device, {
         foreignKey: 'vehicle_id',
-        as: 'device',
+        as: 'devices',
         onUpdate: 'CASCADE'
       });
     }

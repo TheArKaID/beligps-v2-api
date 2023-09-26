@@ -26,7 +26,7 @@ controllers.index = async (req, res, next) => {
         include: [
             {
                 model: models.Device,
-                as: 'device',
+                as: 'devices',
                 attributes: ['id', 'imei', 'phone', 'status', 'attributes'],
                 where: {
                     [Op.or]: [
@@ -59,7 +59,7 @@ controllers.show = async (req, res, next) => {
         include: [
             {
                 model: models.Device,
-                as: 'device',
+                as: 'devices',
                 attributes: ['id', 'imei', 'phone', 'status', 'attributes']
             }
         ],
